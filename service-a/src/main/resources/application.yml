@@ -1,0 +1,24 @@
+#Configuration for failfast=false
+
+# HTTP Server
+server:
+  port: ${PORT:8080}   # HTTP port
+
+logging:
+  # file: /var/log/@project.artifactId@/${spring.application.name}.log
+  level:
+    com.netflix.discovery: 'OFF'
+    org.springframework.cloud: 'INFO'
+    org.springframework.web: 'INFO'
+    com.codedpoetry: 'DEBUG'
+
+# Discovery Server Access
+eureka:
+  instance:
+    preferIpAddress: true
+    healthCheckUrlPath: ${management.context-path}/health
+  client:
+    healthcheck:
+        enabled: true
+    serviceUrl:
+        defaultZone: ${DISCOVERY_SERVER:'http://localhost:1111/eureka/'}

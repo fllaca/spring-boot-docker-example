@@ -1,0 +1,34 @@
+version: '2'
+
+services:
+
+    eureka:
+        build: ./discovery-server/target
+        ports:
+        - 1111:8080
+        read_only: true
+        volumes:
+        - /tmp
+
+    gateway:
+        build: ./gateway/target
+        environment:
+            DISCOVERY_SERVER: http://eureka:8080/eureka/
+        ports:
+        - 8080:8080
+        depends_on:
+        - eureka
+        - servicea
+        read_only: true
+        volumes:
+        - /tmp
+
+    servicea:
+        build: ./service-a/target
+        environment:
+            DISCOVERY_SERVER: http://eureka:8080/eureka/
+        depends_on:
+        - eureka
+        read_only: true
+        volumes:
+        - /tmp

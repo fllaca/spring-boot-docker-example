@@ -1,0 +1,14 @@
+.project
+.settings/
+
+service-a/target/
+service-a/.classpath
+service-a/.project
+
+gateway/target/
+gateway/.classpath
+gateway/.project
+
+discovery-server/target/
+discovery-server/.classpath
+discovery-server/.project
