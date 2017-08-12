@@ -236,9 +236,9 @@
 						eureka:
 						  client:
 						    healthcheck:
-						        enabled: true
+						     enabled: true
 						    serviceUrl:
-						        defaultZone: ${DISCOVERY_SERVER}
+						     defaultZone: "${DISCOVERY_SERVER}"
 					</code></pre>
 				</section>
 
@@ -246,7 +246,7 @@
 					<h3>Configuration: Environment Vars</h3>
 					<pre><code style="font-size: 70% !important;" class="bash hljs" data-trim data-noescape >
 docker run --detach  \
-  -e "DISCOVERY_SERVER=https://eureka.server:8000/eureka" \
+  -e "DISCOVERY_SERVER=http://eureka.test:8000/eureka" \
   my-app:latest
 					</code></pre>
 				</section>
@@ -331,8 +331,8 @@ logging:
 					<pre><code class=" dockerfile hljs" data-trim data-noescape >
 						# Add an entrypoint
 						COPY docker-entrypoint.sh /
-						RUN chmod u+x /docker-entrypoint.sh && \
-							chown java /docker-entrypoint.sh
+						RUN chmod u+x /docker-entrypoint.sh &&\
+						 chown java /docker-entrypoint.sh
 						ENTRYPOINT ["/docker-entrypoint.sh"]
 					</code></pre>
 				</section>
@@ -343,8 +343,8 @@ logging:
 						ENV JAVA_OPTIONS ""
 						[...]
 						# Command to execute!!
-						CMD ["java","${JAVA_OPTIONS}","-jar", \
-								 "${APP_DIR}/${JAR_NAME}.jar"]
+						CMD ["java","${JAVA_OPTIONS}","-jar",\
+						  "${APP_DIR}/${JAR_NAME}.jar"]
 
 					</code></pre>
 				</section>
@@ -375,7 +375,7 @@ logging:
 							RUN mkdir -p $LOGS_DIR $APP_DIR && \
 							    chown -R java $LOGS_DIR $APP_DIR
 
-							# Specify that Logs directory can be mounted
+							# Specify that Logs dir can be mounted
 							VOLUME $LOGS_DIR
 						</code></pre>
 					</section>
@@ -489,8 +489,10 @@ logging:
 				history: true,
 				center: true,
 
-				width: '90%',
-	 			height: '90%',
+				margin: 0.05,
+
+				//width: '90%',
+	 			//height: '90%',
 
 				transition: 'slide', // none/fade/slide/convex/concave/zoom
 
