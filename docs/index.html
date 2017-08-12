@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Spring Boot + Docker - by Fernando Llaca</title>
+
+		<meta name="description" content="Writing Dockerfiles for Spring Boot Applications">
+		<meta name="author" content="Fernando Llaca">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css" id="theme">
+		<link rel="stylesheet" href="css/theme/custom.css" >
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+				<div class="header" style="display: block; position: absolute; top: 16px; right: 16px; z-index: 20; vertical-align: middle">
+					<!-- <a class="share-reveal-twitter" href="http://twitter.com/share?url=http%3A%2F%2Flab.hakim.se%2Freveal-js&amp;text=reveal.js%20-%20The%20HTML%20presentation%20framework&amp;via=revealjs&amp;related=revealjs"> -->
+						<svg viewBox="0 0 2000 1625.36" width="0.7em" height="0.7em" version="1.1" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;">
+							<path d="m 1999.9999,192.4 c -73.58,32.64 -152.67,54.69 -235.66,64.61 84.7,-50.78 149.77,-131.19 180.41,-227.01 -79.29,47.03 -167.1,81.17 -260.57,99.57 C 1609.3399,49.82 1502.6999,0 1384.6799,0 c -226.6,0 -410.328,183.71 -410.328,410.31 0,32.16 3.628,63.48 10.625,93.51 -341.016,-17.11 -643.368,-180.47 -845.739,-428.72 -35.324,60.6 -55.5583,131.09 -55.5583,206.29 0,142.36 72.4373,267.95 182.5433,341.53 -67.262,-2.13 -130.535,-20.59 -185.8519,-51.32 -0.039,1.71 -0.039,3.42 -0.039,5.16 0,198.803 141.441,364.635 329.145,402.342 -34.426,9.375 -70.676,14.395 -108.098,14.395 -26.441,0 -52.145,-2.578 -77.203,-7.364 52.215,163.008 203.75,281.649 383.304,284.946 -140.429,110.062 -317.351,175.66 -509.5972,175.66 -33.1211,0 -65.7851,-1.949 -97.8828,-5.738 181.586,116.4176 397.27,184.359 628.988,184.359 754.732,0 1167.462,-625.238 1167.462,-1167.47 0,-17.79 -0.41,-35.48 -1.2,-53.08 80.1799,-57.86 149.7399,-130.12 204.7499,-212.41" style="fill:#ffffff"></path>
+						</svg>
+					<!-- </a> -->
+
+					<small style="vertical-align: middle;">@NandoLlaca</small>
+				</div>
+
+
+				<section>
+					<h1>Integration Tests</h1>
+					<h3>with Docker</h3>
+					<p>
+						<small>by <a href="http://codedpoetry.com/about">Fernando Llaca</a> / <a href="http://twitter.com/nandollaca">@nandollaca</a></small>
+					</p>
+				</section>
+
+				<section id="about-me">
+					<h3>Hello!</h3>
+					<img class="no-background" src="img/avatarfer02.png"></img>
+					<h4>Fernando Llaca / <a href="http://twitter.com/nandollaca">@nandollaca</a> </h4>
+					<p>
+						Software Engineer at BEEVA
+					</p>
+				</section>
+
+				<!-- Example of nested vertical slides -->
+				<section id="goals">
+					<h2>Goal</h2>
+					<p> In 40 minutes you will be a black belt in...</p>
+					<ul>
+						<li>Docker Basics</li>
+						<li>Dockerfile writing</li>
+						<li>Logs, Security and <br>Configuration in SpringBoot + Docker</li>
+						<li>Useful Tools</li>
+					</ul>
+
+				</section>
+
+				<section id="docker" data-background="#068de9" data-background-transition="zoom">
+					<h2>Docker</h2>
+					<img class="no-background" src="img/docker-logo.png"></img>
+
+				</section>
+
+				<section id="docker-details" data-background="#ffffff" data-transition="convex">
+					<h2>Docker Layers</h2>
+					<img class="no-background" src="img/docker-layers.png"></img>
+
+				</section>
+
+
+
+				<section data-transition="slide" data-background="#b5533c" data-background-transition="zoom">
+					<h2>Dockerfile Writing</h2>
+				</section>
+
+				<section id="dockerfile-start-1" data-transition="fade-in fade-out" data-transition-speed="fast">
+					<pre class="big" ><code class="big dockerfile hljs" data-trim data-noescape >
+						FROM <mark><mark class="fragment fade-out replace">?</mark></mark><mark class="fragment fade-in"><mark class="fragment fade-out replace">java</mark></mark><mark class="fragment fade-in">openjdk</mark><mark class="fragment fade-in">:8</mark><mark class="fragment fade-in">-jre-alpine</mark>
+						&nbsp;
+						&nbsp;
+						&nbsp;
+						&nbsp;
+					</code></pre>
+				</section>
+				<section id="dockerfile-start-2" data-transition="fade-in fade-out" data-transition-speed="fast">
+					<pre class="big" ><code class="big dockerfile hljs" data-trim data-noescape >
+						FROM openjdk:8-jre-alpine
+						<mark class="">COPY my-application.jar \
+						  /usr/share/app/my-app.jar</mark>
+						&nbsp;
+						&nbsp;
+					</code></pre>
+				</section>
+				<section id="dockerfile-start-3" data-transition="fade-in slide-out" data-transition-speed="fast">
+					<pre class="big" ><code class="big dockerfile hljs" data-trim data-noescape >
+						FROM openjdk:8-jre-alpine
+						COPY my-application.jar \
+						  /usr/share/app/my-app.jar
+						<mark class="">CMD java -jar
+							/usr/share/app/my-app.jar</mark>
+					</code></pre>
+				</section>
+
+				<section id="dockerfile-clean" data-transition="convex">
+					<h3>Well, let's be clear</h3>
+					<pre class="big" ><code class="big dockerfile hljs" data-trim data-noescape >
+						FROM openjdk:8-jre-alpine
+						<mark>ENV APP_DIR /usr/share/app</mark>
+						COPY my-application.jar \
+						  <mark class="">$APP_DIR</mark>/my-app.jar
+						CMD java -jar
+							<mark class="">$APP_DIR</mark>/my-app.jar
+					</code></pre>
+				</section>
+
+
+				<!-- -------- -->
+				<!-- SECURITY -->
+				<!-- -------- -->
+
+				<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+					<h2>Security</h2>
+					<img style="width: 30%;" class="no-background" src="img/shield.png"></img>
+				</section>
+
+				<section id="security-1" data-transition="fade-out" >
+					<pre><code class=" dockerfile hljs" data-trim data-noescape >
+						FROM openjdk:8-jre-alpine
+						ENV APP_DIR /usr/share/app
+
+
+
+
+						[...]
+					</code></pre>
+				</section>
+
+				<section id="security-2" data-transition="fade-in fade-out" data-transition-speed="fast">
+					<pre><code class=" dockerfile hljs" data-trim data-noescape >
+						FROM openjdk:8-jre-alpine
+						ENV APP_DIR /usr/share/app
+						<mark>RUN adduser -D java</mark>
+
+
+
+						[...]
+					</code></pre>
+				</section>
+
+				<section id="security-3" data-transition="fade-in fade-out" data-transition-speed="fast">
+					<pre><code class=" dockerfile hljs" data-trim data-noescape >
+						FROM openjdk:8-jre-alpine
+						ENV APP_DIR /usr/share/app
+						RUN adduser -D java
+						<mark>RUN mkdir -p $APP_DIR && \
+						    chown -R java $APP_DIR</mark>
+
+						[...]
+					</code></pre>
+				</section>
+
+				<section id="security-3" data-transition="fade-in fade-out" data-transition-speed="fast">
+					<pre><code class=" dockerfile hljs" data-trim data-noescape >
+						FROM openjdk:8-jre-alpine
+						ENV APP_DIR /usr/share/app
+						RUN adduser -D java
+						RUN mkdir -p $APP_DIR && \
+						    chown -R java $APP_DIR
+						<mark>USER java</mark>
+						[...]
+					</code></pre>
+				</section>
+
+				<section id="security-summary-1" data-transition="fade-in fade-out">
+					<h3>Security</h3>
+					<ul>
+						<li class="fragment">Use a non-root user</li>
+						<li class="fragment">Give him privileges</li>
+						<li class="fragment">Prepare to run as read-only</li>
+						<li class="fragment">Static Image Scan:
+							<br><a href="#">TwistLock</a> / <a href="#">Docker Cloud</a></li>
+					</ul>
+
+				</section>
+
+				<section data-transition="slide" data-background="#f6b600" data-background-transition="zoom">
+					<h2 style="color: white">Configuration</h2>
+				</section>
+
+				<section data-transition="fade-in" data-background-image="img/sheldon-papers.gif">
+					<h2>Configuration</h2>
+				</section>
+
+				<section id="config-1" data-transition="fade-in fade-out">
+					<h3>Configuration: three approaches</h3>
+					<ul>
+						<li class="fragment">Environment Variables</li>
+						<li class="fragment">Spring Cloud Config</li>
+						<li class="fragment">Mounted Volumes</li>
+					</ul>
+				</section>
+
+				<section id="config-env-vars" data-transition="fade-in fade-out">
+					<h3>Configuration: Environment Vars</h3>
+					<pre><code class="yaml hljs" data-trim data-noescape >
+						# application.yml
+						eureka:
+						  client:
+						    healthcheck:
+						        enabled: true
+						    serviceUrl:
+						        defaultZone: ${DISCOVERY_SERVER}
+					</code></pre>
+				</section>
+
+				<section id="config-env-vars-2" data-transition="fade-in fade-out">
+					<h3>Configuration: Environment Vars</h3>
+					<pre><code style="font-size: 70% !important;" class="bash hljs" data-trim data-noescape >
+docker run --detach  \
+  -e "DISCOVERY_SERVER=https://eureka.server:8000/eureka" \
+  my-app:latest
+					</code></pre>
+				</section>
+
+				<section id="config-config-server" data-transition="fade-in fade-out">
+					<h3>Configuration: Spring Cloud Config</h3>
+					<pre><code style="line-height: 120%;" class="yaml hljs" data-trim data-noescape >
+						<mark># bootstrap.yml</mark>
+						spring:
+						  application:
+						    name: "my-awesome-service"
+						  cloud:
+						    config:
+						      failFast: true
+						      uri: "http://config-server:8888"
+					</code></pre>
+				</section>
+
+				<!-- ------- -->
+				<!-- LOGGING #FEE80A-->
+				<!-- ------- -->
+
+				<section data-transition="slide" data-background="#F6E000" data-background-transition="zoom">
+					<h2 style="color: white">Logging</h2>
+					<img style="width: 20%;" class="no-background" src="img/googling-error-message.jpg"></img>
+				</section>
+
+				<section id="logging-1" data-transition="fade-in fade-out">
+					<h3>Logging</h3>
+					<ul>
+						<li class="fragment">Log to <b>stdout</b></li>
+						<li class="fragment">Log to a mounted volume</li>
+						<li class="fragment">Use Docker log drivers</li>
+						<li class="fragment">Spring Cloud Sleuth</li>
+					</ul>
+				</section>
+
+				<section id="logging-stdout" data-transition="fade-in fade-out">
+					<h3>Logging to <b>stdout</b></h3>
+					<pre><code class="yaml hljs" data-trim data-noescape >
+# application.yml
+logging:
+  level:
+    com.netflix.discovery: 'OFF'
+    com.codedpoetry: 'DEBUG'
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss}..."
+					</code></pre>
+				</section>
+
+				<section id="logging-volume" data-transition="fade-in fade-out">
+					<h3>Logging to a mounted volume</h3>
+					<pre><code class=" dockerfile hljs" data-trim data-noescape >
+						# Dockerfile
+						[...]
+						ENV LOGS_DIR /var/log/my-app
+						VOLUME $LOGS_DIR
+						<mark>ENV LOGGING_FILE $LOGS_DIR/my-app.log</mark>
+						[...]
+					</code></pre>
+				</section>
+
+				<section id="logging-sleuth" data-transition="fade-in fade-out" data-background="#FFFFFF">
+					<h3>Spring Cloud Sleuth</h3>
+					<img style="width: 90%" class="no-background" src="img/zipkin-ui.png"></img>
+				</section>
+
+				<section data-transition="slide" data-background="#B900F6" data-background-transition="zoom">
+					<h2 style="color: white">Other stuff...</h2>
+				</section>
+
+				<section>
+					<h3>Expose Ports</h3>
+					<pre><code class="big dockerfile hljs" data-trim data-noescape >
+						ENV SERVER_PORT 8080
+						EXPOSE $SERVER_PORT
+					</code></pre>
+				</section>
+
+				<section>
+					<h3>Docker Entrypoint</h3>
+					<pre><code class=" dockerfile hljs" data-trim data-noescape >
+						# Add an entrypoint
+						COPY docker-entrypoint.sh /
+						RUN chmod u+x /docker-entrypoint.sh && \
+							chown java /docker-entrypoint.sh
+						ENTRYPOINT ["/docker-entrypoint.sh"]
+					</code></pre>
+				</section>
+
+				<section>
+					<h3>Java Options Environment Var</h3>
+					<pre><code class=" dockerfile hljs" data-trim data-noescape >
+						ENV JAVA_OPTIONS ""
+						[...]
+						# Command to execute!!
+						CMD ["java","${JAVA_OPTIONS}","-jar", \
+								 "${APP_DIR}/${JAR_NAME}.jar"]
+
+					</code></pre>
+				</section>
+
+				<section data-transition="slide" data-background="#b5533c" data-background-transition="zoom">
+					<h2>Recap</h2>
+					<p> <q> Oh, God... I'm lost since the Sheldon slide...</q> </p>
+				</section>
+
+				<!-- -->
+				<section id="dockerfile-full">
+					<section>
+						<h3>Final Dockerfile</h3>
+						<pre><code class=" dockerfile hljs" data-trim data-noescape >
+							FROM openjdk:8-jre-alpine
+							ENV APP_DIR /usr/share/app
+							ENV LOG_DIR /var/log/app
+
+							# Create an execution user
+							RUN adduser -D java
+						</code></pre>
+					</section>
+
+					<section>
+						<pre><code class=" dockerfile hljs" data-trim data-noescape >
+							# Create directories for logs and for
+							# our java binaries
+							RUN mkdir -p $LOGS_DIR $APP_DIR && \
+							    chown -R java $LOGS_DIR $APP_DIR
+
+							# Specify that Logs directory can be mounted
+							VOLUME $LOGS_DIR
+						</code></pre>
+					</section>
+
+					<section>
+						<pre><code class=" dockerfile hljs" data-trim data-noescape >
+							# Define HealthChecks
+							HEALTHCHECK --interval=15s --timeout=3s \
+							  CMD curl -f http://localhost:3333/health \
+								|| exit 1
+							# Exposed Ports
+							ENV SERVER_PORT 8080
+							EXPOSE $SERVER_PORT
+						</code></pre>
+					</section>
+
+					<section>
+						<pre><code class=" dockerfile hljs" data-trim data-noescape >
+							# Add an entrypoint
+							COPY docker-entrypoint.sh /
+							RUN chmod u+x /docker-entrypoint.sh && \
+							  chown java /docker-entrypoint.sh
+							ENTRYPOINT ["/docker-entrypoint.sh"]
+
+						</code></pre>
+					</section>
+
+					<section>
+						<pre><code class=" dockerfile hljs" data-trim data-noescape >
+							# All the remaining actions will be
+							# performed as user "java"
+							USER java
+							# Add generated binaries
+							ENV JAR_NAME  \
+							    @project.artifactId@-@project.version@
+							COPY $JAR_NAME.jar $APP_DIR/
+						</code></pre>
+					</section>
+
+					<section>
+						<pre><code class=" dockerfile hljs" data-trim data-noescape >
+
+							# Command to execute!!
+							CMD ["java","${JAVA_OPTIONS}","-jar", \
+							     "${APP_DIR}/${JAR_NAME}.jar"]
+
+						</code></pre>
+					</section>
+
+				</section>
+
+				<section id="live-demo" data-transition="concave" data-background-image="img/live-demo-because.jpg">
+				</section>
+
+				<section>
+					<h2>So...</h2>
+					<ul>
+						<li class="fragment" >Choose well (or build) your base Docker image</li>
+						<li class="fragment">The order of the layers is important</li>
+						<li class="fragment">Run your containers safely (read-only, non-root user)</li>
+						<li class="fragment">If possible, aggregate configuration and logs</li>
+						<li class="fragment">Limit resources consumption</li>
+					</ul>
+
+					<aside class="notes">
+						Choose well (or build) your base Docker image<br>
+						The order of the layers is important<br>
+						Run your containers safely (read-only, non-root user)<br>
+						If possible, aggregate configuration and logs<br>
+						Limit resources consumption<br>
+					</aside>
+				</section>
+
+				<section>
+					<h2>Some nice tools</h2>
+					<ul>
+						<li>Spotify's Dockerfile Maven plugin</li>
+						<li>Docker Compose</li>
+					</ul>
+
+					<aside class="notes">
+						Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
+					</aside>
+				</section>
+
+				<section style="text-align: left;">
+					<h1>THE END</h1>
+					<p>
+						- <a href="#">Thanks! Any question?</a> <br>
+						- <a href="https://twitter.com/nandollaca">
+							<svg viewBox="0 0 2000 1625.36" width="1em" height="1em" version="1.1" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;">
+								<path d="m 1999.9999,192.4 c -73.58,32.64 -152.67,54.69 -235.66,64.61 84.7,-50.78 149.77,-131.19 180.41,-227.01 -79.29,47.03 -167.1,81.17 -260.57,99.57 C 1609.3399,49.82 1502.6999,0 1384.6799,0 c -226.6,0 -410.328,183.71 -410.328,410.31 0,32.16 3.628,63.48 10.625,93.51 -341.016,-17.11 -643.368,-180.47 -845.739,-428.72 -35.324,60.6 -55.5583,131.09 -55.5583,206.29 0,142.36 72.4373,267.95 182.5433,341.53 -67.262,-2.13 -130.535,-20.59 -185.8519,-51.32 -0.039,1.71 -0.039,3.42 -0.039,5.16 0,198.803 141.441,364.635 329.145,402.342 -34.426,9.375 -70.676,14.395 -108.098,14.395 -26.441,0 -52.145,-2.578 -77.203,-7.364 52.215,163.008 203.75,281.649 383.304,284.946 -140.429,110.062 -317.351,175.66 -509.5972,175.66 -33.1211,0 -65.7851,-1.949 -97.8828,-5.738 181.586,116.4176 397.27,184.359 628.988,184.359 754.732,0 1167.462,-625.238 1167.462,-1167.47 0,-17.79 -0.41,-35.48 -1.2,-53.08 80.1799,-57.86 149.7399,-130.12 204.7499,-212.41" style="fill: #42affa;"></path>
+							</svg> @NandoLlaca</a> <small style="vertical-align: middle;" >(http://codedpoetry.com)</small>
+					</p>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+		<script src="js/typed.min.js"></script>
+
+		<script>
+
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				width: '90%',
+	 			height: '90%',
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+			Reveal.addEventListener( 'fragmentshown', function( event ) {
+
+				if (event.fragment.classList.contains("replace")) {
+					event.fragment.classList.add("hidden")
+				}
+			});
+			Reveal.addEventListener( 'fragmenthidden', function( event ) {
+
+				if (event.fragment.classList.contains("replace")) {
+					event.fragment.classList.remove("hidden")
+				}
+			});
+
+/*
+			Reveal.addEventListener( 'fragmentshown', function( event ) {
+				// event.fragment = the fragment DOM element
+
+				console.error(event.fragment.id)
+
+
+				if (event.fragment.classList.contains("type")) {
+					var typed = new Typed(event.fragment, {
+					  strings: ["First sentence."],
+					  typeSpeed: 30,
+						showCursor: false
+					});
+					typed.complete();
+					//typed.destroy();
+				}
+			});
+*/
+
+		</script>
+
+	</body>
+</html>

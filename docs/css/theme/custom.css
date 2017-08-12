@@ -1,0 +1,52 @@
+.reveal pre code {
+  background: none;
+  line-height: 150%;
+}
+
+.reveal pre {
+  box-shadow: none;
+  font-family: Consolas !important;
+  font-size: 85% !important;
+}
+
+.reveal pre code.big {
+  font-size: 120% !important;
+}
+
+.reveal pre code mark span {
+  color: red;
+  background: none;
+  font-weight: bold;
+}
+
+.reveal pre code mark {
+  color: red;
+  background: none;
+  font-weight: bold;
+}
+
+.reveal img.no-background {
+  border: none;
+  background: none;
+  box-shadow: none;
+  max-height: 70%;
+}
+.hidden {
+  display: none;
+}
+
+.blink {
+  animation: blink-animation 1s steps(5, start) infinite;
+  -webkit-animation: blink-animation 1s steps(5, start) infinite;
+}
+
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+@-webkit-keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
