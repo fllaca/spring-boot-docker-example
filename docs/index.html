@@ -55,8 +55,8 @@
 
 
 				<section>
-					<h1>Integration Tests</h1>
-					<h3>with Docker</h3>
+					<h1>Spring Boot + Docker</h1>
+					<h3>writing Dockerfiles</h3>
 					<p>
 						<small>by <a href="http://codedpoetry.com/about">Fernando Llaca</a> / <a href="http://twitter.com/nandollaca">@nandollaca</a></small>
 					</p>
@@ -265,6 +265,16 @@ docker run --detach  \
 					</code></pre>
 				</section>
 
+				<section id="config-config-server" data-transition="fade-in fade-out">
+					<h3>Configuration: Using Volumes</h3>
+					<pre><code style="font-size: 100% !important;" class="bash hljs" data-trim data-noescape >
+						docker run --detach \
+						  <mark>-v /host/path/to/config:/container/conf/path</mark> \
+						  my-app:latest
+
+					</code></pre>
+				</section>
+
 				<!-- ------- -->
 				<!-- LOGGING #FEE80A-->
 				<!-- ------- -->
@@ -293,7 +303,7 @@ logging:
     com.netflix.discovery: 'OFF'
     com.codedpoetry: 'DEBUG'
   pattern:
-    file: "%d{yyyy-MM-dd HH:mm:ss}..."
+    console: "%d{yyyy-MM-dd HH:mm:ss}..."
 					</code></pre>
 				</section>
 
@@ -382,10 +392,6 @@ logging:
 
 					<section>
 						<pre><code class=" dockerfile hljs" data-trim data-noescape >
-							# Define HealthChecks
-							HEALTHCHECK --interval=15s --timeout=3s \
-							  CMD curl -f http://localhost:3333/health \
-								|| exit 1
 							# Exposed Ports
 							ENV SERVER_PORT 8080
 							EXPOSE $SERVER_PORT
@@ -410,7 +416,7 @@ logging:
 							USER java
 							# Add generated binaries
 							ENV JAR_NAME  \
-							    @project.artifactId@-@project.version@
+							  @project.artifactId@-@project.version@
 							COPY $JAR_NAME.jar $APP_DIR/
 						</code></pre>
 					</section>

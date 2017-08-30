@@ -10,7 +10,7 @@
 }
 
 .reveal pre code.big {
-  font-size: 120% !important;
+  font-size: 110% !important;
 }
 
 .reveal pre code mark span {
@@ -49,4 +49,9 @@
   to {
     visibility: hidden;
   }
+}
+
+.reveal pre code {
+  overflow-x:hidden;
+  width: 120%;
 }

@@ -12,3 +12,6 @@ gateway/.project
 discovery-server/target/
 discovery-server/.classpath
 discovery-server/.project
+
+docs/node_modules/
+docs/package-lock.json
