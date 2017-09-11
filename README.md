@@ -2,6 +2,12 @@
 
 [Slides](https://fllaca.github.io/spring-boot-docker-example/)
 
+## Build services and Docker images
+
+```
+mvn package
+```
+
 ## Start Docker Local environment
 
 ```

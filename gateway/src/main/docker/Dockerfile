@@ -14,9 +14,6 @@ RUN mkdir -p $LOGS_DIR $APP_DIR && \
 # Specify that Logs directory can be mounted
 VOLUME $LOGS_DIR
 
-# Define HealthChecks
-HEALTHCHECK --interval=15s --timeout=3s \
-  CMD curl -f http://localhost:3333/health || exit 1
 
 # Exposed Ports
 ENV PORT 8080
