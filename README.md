@@ -1,6 +1,6 @@
 # Spring Boot Dockerfiles Example
 
-[Slides](https://fllaca.github.io/spring-boot-docker-example/)
+Example of a Spring Boot Application with automated Docker images generation. Watch the [Slides](https://fllaca.github.io/spring-boot-docker-example/) for more info!
 
 ## Build services and Docker images
 
@@ -22,3 +22,7 @@ docker-compose up -d
   docker-compose build --no-cache && \
   docker-compose up -d
 ```
+
+## Accessing to graylog
+
+To see the logs you can go to [localhost:9000](http://localhost:9000) and access with credentials *admin/admin*.

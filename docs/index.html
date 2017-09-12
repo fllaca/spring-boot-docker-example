@@ -65,17 +65,18 @@
 
 				<section id="about-me">
 					<h3>Hello!</h3>
-					<img class="no-background" src="img/avatarfer02.png"></img>
+					<img class="no-background" src="img/avatarfer02.png" style="width: 35%"></img>
 					<h4>Fernando Llaca / <a href="http://twitter.com/nandollaca">@nandollaca</a> </h4>
 					<p>
 						Software Engineer at BEEVA
 					</p>
+					<p>ferllarom@gmail.com</p>
 				</section>
 
 				<!-- Example of nested vertical slides -->
 				<section id="goals">
 					<h2>Goal</h2>
-					<p> In 40 minutes you will be a black belt in...</p>
+					<p> In 40 minutes you will know about...</p>
 					<ul>
 						<li>Docker Basics</li>
 						<li>Dockerfile writing</li>
@@ -291,6 +292,7 @@ docker run --detach  \
 						<li class="fragment">Log to <b>stdout</b></li>
 						<li class="fragment">Log to a mounted volume</li>
 						<li class="fragment">Use Docker log drivers</li>
+						<li class="fragment">Custom log appenders</li>
 						<li class="fragment">Spring Cloud Sleuth</li>
 					</ul>
 				</section>
@@ -317,6 +319,19 @@ logging:
 						VOLUME $LOGS_DIR
 						<mark>ENV LOGGING_FILE $LOGS_DIR/my-app.log</mark>
 						[...]
+					</code></pre>
+				</section>
+
+				<section id="logging-appenders" data-transition="fade-in fade-out">
+					<h3>Using Custom Appenders</h3>
+					<pre><code class="xml hljs" data-trim data-noescape >
+						&lt;!-- logback.xml --&gt;
+						&lt;configuration&gt;
+						    &lt;include resource="org/.../base.xml"/&gt;
+						    &lt;appender name="..." class="com..." &gt;
+						        ...
+						    &lt;/appender&gt;
+						 &lt;/configuration&gt;
 					</code></pre>
 				</section>
 
@@ -460,7 +475,9 @@ logging:
 					<h2>Some nice tools</h2>
 					<ul>
 						<li>Spotify's Dockerfile Maven plugin</li>
+						<li>Transmode's Docker Gradle Plugin</li>
 						<li>Docker Compose</li>
+						<li><a href="https://github.com/fllaca/spring-boot-docker-example">https://github.com/fllaca/spring-boot-docker-example</a></li>
 					</ul>
 
 					<aside class="notes">
